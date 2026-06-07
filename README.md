@@ -1,14 +1,14 @@
 # Octo Issue Brief
 
-A tiny Octavus demo that turns a GitHub issue URL into a maintainer-ready implementation brief.
+A tiny maintainer tool that turns a GitHub issue URL into an implementation brief.
 
 Paste an issue, let an Octavus worker fetch the thread, optionally search the repo code, then return a compact plan a maintainer can act on before opening an editor.
 
-Built by [Leo Tavares](https://github.com/leotavares26), DevRel @ Google DeepMind, as a small example of how much agentic product surface you can get from a declarative worker plus a couple of server-owned tools.
+Built by [Leo Tavares](https://github.com/leotavares26), DevRel @ Google DeepMind, because issue triage is one of those small maintainer loops that should be faster.
 
 ## Why this is useful
 
-OSS maintainers spend a lot of time re-reading issue threads before deciding what to do. This demo compresses that loop into a short brief:
+OSS maintainers spend a lot of time re-reading issue threads before deciding what to do. It compresses that loop into a short brief:
 
 - what the issue actually says
 - evidence from labels, comments, and repo snippets
@@ -43,7 +43,7 @@ agents/issue-brief-worker/   # Octavus worker definition
 src/github-tools.ts          # server-side tool handlers
 src/run.ts                   # runs the Octavus worker
 src/mock.ts                  # exercises the tools without an Octavus key
-scripts/check-no-secrets.mjs # simple pre-push secret scan
+scripts/                    # lightweight project checks
 ```
 
 ## Quick start
@@ -111,23 +111,16 @@ The issue reports a reproducible failure around <specific behavior>. It looks sc
 Thanks for the clear report. I can reproduce the path from <evidence>. The likely fix is in <area>; I’ll add a regression test before changing it.
 ```
 
-## What this demonstrates
+## Design notes
 
 - **Declarative agent behavior**: the worker is defined in YAML, not a pile of orchestration code.
 - **Server-owned tools**: GitHub API and local repo search run in your process, so credentials stay private.
 - **Agentic search loop**: the model can choose targeted code searches before writing the brief.
 - **Portable integration**: any Node backend can run the same worker through `@octavus/server-sdk`.
 
-## Safety checklist
+## Development
 
-This repo is set up to avoid accidental secret leaks:
-
-- `.env` and `.env.*` are ignored
-- `.env.example` contains only empty placeholders
-- API keys are read from environment variables
-- `npm run secrets:check` scans for common token formats
-
-Before pushing changes, run:
+Local config lives in `.env`; start from `.env.example` and keep your own keys out of git. Before pushing changes, run:
 
 ```bash
 npm run check
