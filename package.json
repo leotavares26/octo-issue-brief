@@ -1,0 +1,36 @@
+{
+  "name": "octo-issue-brief",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "description": "A tiny Octavus worker that turns a GitHub issue into a maintainer-ready implementation brief.",
+  "scripts": {
+    "dev": "tsx src/run.ts",
+    "mock": "tsx src/mock.ts",
+    "agents:validate": "octavus validate agents/issue-brief-worker",
+    "agents:sync": "octavus sync agents/issue-brief-worker",
+    "agents:lint": "node scripts/lint-agent.mjs",
+    "secrets:check": "node scripts/check-no-secrets.mjs",
+    "check": "tsc --noEmit && npm run agents:lint && npm run secrets:check"
+  },
+  "keywords": [
+    "octavus",
+    "agents",
+    "github",
+    "devtools",
+    "worker"
+  ],
+  "author": "Leo Tavares",
+  "license": "MIT",
+  "dependencies": {
+    "@octavus/server-sdk": "^4.2.0",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "@octavus/cli": "^4.2.0",
+    "@types/node": "^24.10.1",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "yaml": "^2.8.1"
+  }
+}

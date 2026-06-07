@@ -1,0 +1,6 @@
+{
+  "slug": "issue-brief-worker",
+  "name": "Issue Brief Worker",
+  "description": "Turns a GitHub issue into a compact maintainer-ready implementation brief.",
+  "format": "worker"
+}

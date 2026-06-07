@@ -1,0 +1,71 @@
+input:
+  ISSUE_URL:
+    type: string
+    description: GitHub issue URL, for example https://github.com/owner/repo/issues/123
+  MAX_COMMENTS:
+    type: integer
+    description: Maximum issue comments to fetch
+    optional: true
+    default: 8
+  MODEL:
+    type: string
+    description: Octavus model identifier to use for the brief
+    optional: true
+    default: anthropic/claude-sonnet-4-5
+
+variables:
+  BRIEF:
+    type: string
+    description: Final maintainer-ready issue brief
+
+tools:
+  get-github-issue:
+    description: Fetch the issue body, labels, repo metadata, and recent comments from GitHub.
+    display: stream
+    parameters:
+      issueUrl:
+        type: string
+        description: Full GitHub issue URL
+      maxComments:
+        type: integer
+        description: Max comments to include
+        optional: true
+
+  search-repo-code:
+    description: Search the repository code for a literal phrase and return matching snippets.
+    display: stream
+    parameters:
+      repo:
+        type: string
+        description: Repository in owner/name form
+      query:
+        type: string
+        description: Literal phrase or symbol to search for
+      maxResults:
+        type: integer
+        description: Maximum snippets to return
+        optional: true
+
+steps:
+  Start issue analyst:
+    block: start-thread
+    thread: brief
+    model: MODEL
+    system: system
+    tools: [get-github-issue, search-repo-code]
+    maxSteps: 6
+    thinking: low
+
+  Ask for maintainer brief:
+    block: add-message
+    thread: brief
+    role: user
+    prompt: issue-request
+    input: [ISSUE_URL, MAX_COMMENTS]
+
+  Write brief:
+    block: next-message
+    thread: brief
+    output: BRIEF
+
+output: BRIEF
