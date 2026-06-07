@@ -70,7 +70,9 @@ Sync the worker to your Octavus project:
 npm run agents:sync
 ```
 
-Copy the returned agent ID into `OCTAVUS_WORKER_AGENT_ID`, then run:
+Or zip and upload the `agents/issue-brief-worker` folder in the Octavus Platform UI.
+
+Copy the returned or displayed agent ID into `OCTAVUS_WORKER_AGENT_ID`, then run:
 
 ```bash
 npm run dev -- https://github.com/octavus-ai/agent-sdk/issues/1
